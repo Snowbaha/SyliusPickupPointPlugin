@@ -1,0 +1,17 @@
+setono_sylius_pickup_point:
+    ui:
+        shipment_to: Au point relais
+        see_on_map: Voir sur la carte
+    form:
+        shipment:
+            pickup_point: Point relais
+            select_pickup_point: Selectionner le point relais
+        shipping_method:
+            pickup_point_provider: Point relais fournisseur
+            select_pickup_point_provider: Selectionner le fournisseur des points relais 
+    provider:
+        faker: Faker
+        dao: DAO
+        gls: GLS
+        post_nord: PostNord
+        dpd: DPD

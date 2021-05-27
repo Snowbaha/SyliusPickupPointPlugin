@@ -40,6 +40,9 @@ class PickupPoint implements PickupPointInterface
     /** @var string|null */
     protected $longitude;
 
+    /** @var integer|null */
+    protected $distance;
+
     public function __construct(
         PickupPointCode $code,
         string $name,
@@ -48,7 +51,8 @@ class PickupPoint implements PickupPointInterface
         string $city,
         string $country,
         string $latitude = null,
-        string $longitude = null
+        string $longitude = null,
+        int $distance = null
     ) {
         $this->code = $code;
         $this->name = $name;
@@ -58,6 +62,7 @@ class PickupPoint implements PickupPointInterface
         $this->country = $country;
         $this->latitude = $latitude;
         $this->longitude = $longitude;
+        $this->distance = $distance; // from the customer location
     }
 
     public function getId(): ?int
@@ -144,6 +149,18 @@ class PickupPoint implements PickupPointInterface
     {
         $this->longitude = $longitude;
     }
+
+    public function getDistance(): ?int
+    {
+        return $this->distance;
+    }
+
+    public function setDistance(?int $distance): void
+    {
+        $this->distance = $distance;
+    }
+
+
 
     public function getFullAddress(): string
     {

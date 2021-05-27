@@ -100,18 +100,18 @@ final class DpdProvider extends Provider
 
     private function transform(PUDO $pudo): PickupPoint
     {
-        $country = $pudo->address->country;
-        $country = 'FR';
+        $country = $pudo->address->country ? $pudo->address->country : 'FR'; // @todo manger other country issue
 
         return new PickupPoint(
             new PickupPointCode($pudo->id, $this->getCode(), $country),
             $pudo->name,
-            $pudo->address->address1, // TODO use the full address (1,2,3, Hint)
+            $pudo->address->address1, // @todo use the full address2, address3, locationHint
             $pudo->address->zipCode,
             $pudo->address->city,
             $country, // getCountryCode
             (string)$pudo->coordinates->latitude,
             (string)$pudo->coordinates->longitude,
+            $pudo->distance ?? null
         );
     }
 }
