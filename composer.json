@@ -39,6 +39,7 @@
         "setono/dao-bundle": "Install this bundle to use the DAO provider",
         "setono/gls-webservice-bundle": "Install this bundle to use the GLS provider",
         "setono/post-nord-bundle": "Install this bundle to use the PostNord provider"
+        "answear/dpd-pl-pickup-services-bundle": "Install this bundle to use the DpD provider"
     },
     "config": {
         "sort-packages": true

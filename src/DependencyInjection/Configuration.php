@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Setono\SyliusPickupPointPlugin\DependencyInjection;
 
 use Setono\DAOBundle\SetonoDAOBundle;
+use Answear\DpdPlPickupServicesBundle\AnswearDpdPlPickupServicesBundle;
 use Setono\GlsWebserviceBundle\SetonoGlsWebserviceBundle;
 use Setono\PostNordBundle\SetonoPostNordBundle;
 use Setono\SyliusPickupPointPlugin\Doctrine\ORM\PickupPointRepository;
@@ -66,6 +67,11 @@ final class Configuration implements ConfigurationInterface
                             ->example(true)
                             ->info('Whether to enable the PostNord provider')
                             ->defaultValue(class_exists(SetonoPostNordBundle::class))
+                        ->end()
+                        ->booleanNode('dpd')
+                            ->example(true)
+                            ->info('Whether to enable the DPD provider')
+                            ->defaultValue(class_exists(AnswearDpdPlPickupServicesBundle::class))
                         ->end()
                     ->end()
                 ->end()

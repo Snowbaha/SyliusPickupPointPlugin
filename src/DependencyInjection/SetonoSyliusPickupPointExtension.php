@@ -71,5 +71,13 @@ final class SetonoSyliusPickupPointExtension extends AbstractResourceExtension
 
             $loader->load('services/providers/post_nord.xml');
         }
+
+        if ($config['providers']['dpd']) {
+            if (!isset($bundles['AnswearDpdPlPickupServicesBundle'])) {
+                throw new LogicException('You should use AnswearDpdPlPickupServicesBundle or disable dpd provider.');
+            }
+
+            $loader->load('services/providers/dpd.xml');
+        }
     }
 }
