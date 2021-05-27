@@ -10,6 +10,9 @@ Setono\SyliusPickupPointPlugin\Model\PickupPoint:
             groups: [Detailed, Autocomplete]
         longitude:
             type: string
+            groups: [Detailed, Autocomplete]        
+        distance:
+            type: integer
             groups: [Detailed, Autocomplete]
     virtual_properties:
         getCode:
@@ -19,4 +22,7 @@ Setono\SyliusPickupPointPlugin\Model\PickupPoint:
         getFullAddress:
             serialized_name: full_address
             type: string
+            groups: [Detailed, Autocomplete]        
+        getOpeningHours:
+            serialized_name: opening_hours
             groups: [Detailed, Autocomplete]

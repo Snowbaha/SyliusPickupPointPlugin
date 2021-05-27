@@ -20,6 +20,8 @@ use Sylius\Component\Core\Model\OrderInterface;
 
 final class DpdProvider extends Provider
 {
+    const DEFAULT_COUNTRY = 'FR'; // Country by default if empty  @todo let configure it in the .yml ?
+
     /** @var PUDOList */
     private $PUDOList;
 
@@ -100,12 +102,11 @@ final class DpdProvider extends Provider
 
     private function transform(PUDO $pudo): PickupPoint
     {
-        $country = $pudo->address->country ? $pudo->address->country : 'FR'; // @todo manger other country issue
-
-        return new PickupPoint(
+        $country = "" !== $pudo->address->country ? $pudo->address->country : self::DEFAULT_COUNTRY;
+        $pickupPoint = new PickupPoint(
             new PickupPointCode($pudo->id, $this->getCode(), $country),
             $pudo->name,
-            $pudo->address->address1, // @todo use the full address2, address3, locationHint
+            $pudo->address->getFullAddress(), // @todo add the locationHint ?
             $pudo->address->zipCode,
             $pudo->address->city,
             $country, // getCountryCode
@@ -113,5 +114,40 @@ final class DpdProvider extends Provider
             (string)$pudo->coordinates->longitude,
             $pudo->distance ?? null
         );
+        // Add the open hours
+        $pickupPoint->opened = $pudo->opened;
+        $days_value = [];
+
+        if('FR' === $country){
+            $days_label = array('Lundi', 'Mardi', 'Mercredi','Jeudi','Vendredi', 'Samedi', 'Dimanche');
+        }else{
+            $days_label = array('Monday', 'Tuesday', 'Wednesday','Thursday','Friday', 'Saturday', 'Sunday');
+        }
+
+        foreach ($pudo->opened->getIterator() as $hours){
+
+            foreach ($hours as $h){
+                $day = $h->day->getValue() - 1; //days start 1 but we need 0 for the index
+
+                if(!isset($days[$day])){
+                    $days_value[$day] = ($days[$day] ?? null).' '.sprintf(
+                            '%s : %s  - %s',
+                            $days_label[$day],
+                            $h->from,
+                            $h->to
+                        );
+                }else{
+                    $days_value[$day] .= sprintf(
+                            ' | %s - %s',
+                            $h->from,
+                            $h->to
+                        );
+                }
+
+
+            }
+        }
+        $pickupPoint->opened = $days_value;
+        return $pickupPoint;
     }
 }

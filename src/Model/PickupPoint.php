@@ -62,7 +62,7 @@ class PickupPoint implements PickupPointInterface
         $this->country = $country;
         $this->latitude = $latitude;
         $this->longitude = $longitude;
-        $this->distance = $distance; // from the customer location
+        $this->distance = $distance; // meters from the customer location
     }
 
     public function getId(): ?int
@@ -170,5 +170,10 @@ class PickupPoint implements PickupPointInterface
             $this->getZipCode(),
             $this->getCity()
         );
+    }
+
+    public function getOpeningHours()
+    {
+        return $this->opened ?? null;
     }
 }
