@@ -5,12 +5,10 @@ declare(strict_types=1);
 namespace Setono\SyliusPickupPointPlugin\Provider;
 
 use function Safe\preg_replace;
+use Answear\DpdPlPickupServicesBundle\ValueObject\WeekStoreHours;
 use Answear\DpdPlPickupServicesBundle\Service\PUDOList;
 use Answear\DpdPlPickupServicesBundle\ValueObject\PUDO;
 use GuzzleHttp\ClientInterface;
-
-
-
 use Setono\SyliusPickupPointPlugin\Exception\TimeoutException;
 use Setono\SyliusPickupPointPlugin\Model\PickupPoint;
 use Setono\SyliusPickupPointPlugin\Model\PickupPointCode;
@@ -114,8 +112,16 @@ final class DpdProvider extends Provider
             (string)$pudo->coordinates->longitude,
             $pudo->distance ?? null
         );
-        // Add the open hours
-        $pickupPoint->opened = $pudo->opened;
+        $pickupPoint->opened = $this->transformOpeningHours($pudo->opened, $country);
+
+        return $pickupPoint;
+    }
+
+    /**
+     * transform the brut data into something readable.
+     */
+    private function transformOpeningHours(WeekStoreHours $opened, string $country): array
+    {
         $days_value = [];
 
         if('FR' === $country){
@@ -124,7 +130,7 @@ final class DpdProvider extends Provider
             $days_label = array('Monday', 'Tuesday', 'Wednesday','Thursday','Friday', 'Saturday', 'Sunday');
         }
 
-        foreach ($pudo->opened->getIterator() as $hours){
+        foreach ($opened->getIterator() as $hours){
 
             foreach ($hours as $h){
                 $day = $h->day->getValue() - 1; //days start 1 but we need 0 for the index
@@ -138,16 +144,16 @@ final class DpdProvider extends Provider
                         );
                 }else{
                     $days_value[$day] .= sprintf(
-                            ' | %s - %s',
-                            $h->from,
-                            $h->to
-                        );
+                        ' | %s - %s',
+                        $h->from,
+                        $h->to
+                    );
                 }
 
 
             }
         }
-        $pickupPoint->opened = $days_value;
-        return $pickupPoint;
+
+        return $days_value;
     }
 }
