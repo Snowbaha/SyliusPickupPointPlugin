@@ -8,6 +8,7 @@ use function Safe\preg_replace;
 use Answear\DpdPlPickupServicesBundle\ValueObject\WeekStoreHours;
 use Answear\DpdPlPickupServicesBundle\Service\PUDOList;
 use Answear\DpdPlPickupServicesBundle\ValueObject\PUDO;
+use Answear\DpdPlPickupServicesBundle\Exception\ServiceException;
 use GuzzleHttp\ClientInterface;
 use Setono\SyliusPickupPointPlugin\Exception\TimeoutException;
 use Setono\SyliusPickupPointPlugin\Model\PickupPoint;
@@ -61,31 +62,20 @@ final class DpdProvider extends Provider
     public function findPickupPoint(PickupPointCode $code): ?PickupPointInterface
     {
         try {
-            $parcelShop = $this->client->getOneParcelShop($code->getIdPart());
+            $pudo = $this->PUDOList->byIdFr($code->getIdPart());
 
-            return $this->transform($parcelShop);
-        } catch (ParcelShopNotFoundException $e) {
+            return $this->transform($pudo);
+        } catch (ServiceException  $e) {
             return null;
-        } catch (ConnectionException $e) {
-            throw new TimeoutException($e);
         }
     }
 
+    /**
+     * Not possible with DPD
+     */
     public function findAllPickupPoints(): iterable
     {
-        try {
-            foreach ($this->countryCodes as $countryCode) {
-                $parcelShops = $this->client->getAllParcelShops($countryCode);
-
-                foreach ($parcelShops as $item) {
-                    yield $this->transform($item);
-                }
-            }
-        } catch (ConnectionException $e) {
-            throw new TimeoutException($e);
-        } catch (NoResultException $e) {
-            return [];
-        }
+        return [];
     }
 
     public function getCode(): string
