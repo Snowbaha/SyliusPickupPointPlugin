@@ -95,11 +95,15 @@ let pickupPoints = {
       radio = radio.replace(/{full_address}/g, value.full_address);
       radio = radio.replace(/{latitude}/g, value.latitude);
       radio = radio.replace(/{longitude}/g, value.longitude);
-      radio = radio.replace(/{distance}/g, value.distance + 'm');
-      radio = radio.replace(/{opening_hours}/g, value.opening_hours);
-      let opening_hours = '';
-      for (const [key, day] of Object.entries(value.opening_hours)) {
-        opening_hours = `${opening_hours} <br> ${day}`;
+
+      let distance = value.distance !== undefined ? value.distance + 'm' : '';
+      radio = radio.replace(/{distance}/g, distance);
+
+      let opening_hours = 'NC';
+      if(value.opening_hours !== undefined) {
+        for (const [key, day] of Object.entries(value.opening_hours)) {
+          opening_hours = `${opening_hours} <br> ${day}`;
+        }
       }
       radio = radio.replace(/{opening_hours}/g, opening_hours);
 

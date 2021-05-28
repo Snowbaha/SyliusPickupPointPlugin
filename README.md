@@ -17,6 +17,7 @@ Add a `<select>` that contains pickup points to your select shipping checkout st
 - DAO
 - GLS
 - PostNord
+- DPD
 - Fake provider (for development/playing purposes)
 
 ## Screenshots
@@ -106,7 +107,11 @@ See an example [here](tests/Application/templates/bundles/SyliusAdminBundle/Ship
 Next add the following to the shop template `SyliusShopBundle/Checkout/SelectShipping/_shipment.html.twig`
 
 ```twig
+{# Default #}
 {% form_theme form.pickupPointId '@SetonoSyliusPickupPointPlugin/Form/theme.html.twig' %}
+
+{# OR use this one for DPD Provider #}
+{% form_theme form.pickupPointId '@SetonoSyliusPickupPointPlugin/Form/theme_accordion.html.twig' %}
 
 {{ form_row(form.pickupPointId) }}
 ```
