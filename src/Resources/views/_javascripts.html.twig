@@ -1,6 +1,10 @@
+{# We only need the scripts in order process or checkout pages #}
+{% set current_route = app.request.attributes.get('_route') ?? ''  %}
+{%  if  'checkout' in current_route or 'order' in current_route  %}
 <script src="{{ asset('bundles/setonosyliuspickuppointplugin/js/setono-pickup-point.js') }}"></script>
 <script>
     pickupPoints.init({
         searchUrl: "{{ path('setono_sylius_pickup_point_shop_ajax_pickup_points_search_by_cart_address') }}?providerCode={providerCode}&_csrf_token={_csrf_token}",
     });
 </script>
+{% endif %}
