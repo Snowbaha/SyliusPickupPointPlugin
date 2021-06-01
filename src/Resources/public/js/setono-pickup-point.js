@@ -1,5 +1,6 @@
 let pickupPoints = {
   pickupPointShippingMethods: document.querySelectorAll('input.input-shipping-method[data-pickup-point-provider]'),
+  pickupPointLabel: document.querySelectorAll('label.setono-sylius-pickup-point-label'),
   pickupPointsField: document.querySelectorAll('div.setono-sylius-pickup-point-field')[0],
   pickupPointsFieldInput: document.querySelectorAll('div.setono-sylius-pickup-point-field > input.setono-sylius-pickup-point-field-input')[0],
   pickupPointsFieldChoices: document.querySelectorAll('div.setono-sylius-pickup-point-field-choices')[0],
@@ -12,7 +13,7 @@ let pickupPoints = {
     self.searchUrl = args.searchUrl;
 
     //complete the label info
-    if (self.pickupPointLabel.length > 0) {
+    if (self.pickupPointLabel !== undefined && self.pickupPointLabel.length > 0) {
       self.completePickupPointLabel();
       return;
     }
