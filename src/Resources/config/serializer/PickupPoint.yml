@@ -18,7 +18,11 @@ Setono\SyliusPickupPointPlugin\Model\PickupPoint:
         getCode:
             serialized_name: code
             type: string
-            groups: [Detailed, Autocomplete]
+            groups: [Detailed, Autocomplete]         
+        getCodeDelimiter:
+            serialized_name: code_delimiter
+            type: string
+            groups: [Detailed, Autocomplete]        
         getFullAddress:
             serialized_name: full_address
             type: string

@@ -84,4 +84,9 @@ final class PickupPointCode
     {
         return $this->country;
     }
+
+    public function getDelimiter(): string
+    {
+        return self::DELIMITER;
+    }
 }

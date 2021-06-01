@@ -125,8 +125,8 @@ final class DpdProvider extends Provider
             foreach ($hours as $h){
                 $day = $h->day->getValue() - 1; //days start 1 but we need 0 for the index
 
-                if(!isset($days[$day])){
-                    $days_value[$day] = ($days[$day] ?? null).' '.sprintf(
+                if(!isset($days_value[$day])){
+                    $days_value[$day] = ($days_value[$day] ?? null).' '.sprintf(
                             '%s : %s  - %s',
                             $days_label[$day],
                             $h->from,

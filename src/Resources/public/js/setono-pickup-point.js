@@ -11,6 +11,12 @@ let pickupPoints = {
     self = this;
     self.searchUrl = args.searchUrl;
 
+    //complete the label info
+    if (self.pickupPointLabel.length > 0) {
+      self.completePickupPointLabel();
+      return;
+    }
+
     if (0 === self.pickupPointShippingMethods.length) {
       return;
     }
@@ -52,6 +58,22 @@ let pickupPoints = {
     xhttp.send();
 
     self.pickupPointChoices = pickupPointChoices;
+  },
+  completePickupPointLabel: function () {
+    console.log('completePickupPointLabel');
+    const element = self.pickupPointLabel[0];
+    const getUrl = element.getAttribute('data-url')
+    const xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+      if (4 === xhttp.readyState && 200 === xhttp.status) {
+        const pickupPoint = JSON.parse(xhttp.response);
+        element.innerHTML += `${pickupPoint.name}  ${ self.getIdentifier(pickupPoint)}`;
+      }
+    }
+
+    // @todo Convert to async as synchronous requests deprecated by browsers
+    xhttp.open('GET', getUrl, false);
+    xhttp.send();
   },
   render: function () {
     let selectedElement = document.querySelectorAll('input.input-shipping-method:checked');
@@ -99,17 +121,29 @@ let pickupPoints = {
       let distance = value.distance !== undefined ? value.distance + 'm' : '';
       radio = radio.replace(/{distance}/g, distance);
 
-      let opening_hours = 'NC';
+      let opening_hours = '';
       if(value.opening_hours !== undefined) {
         for (const [key, day] of Object.entries(value.opening_hours)) {
           opening_hours = `${opening_hours} <br> ${day}`;
         }
       }
       radio = radio.replace(/{opening_hours}/g, opening_hours);
+      radio = radio.replace(/{identifier}/g, self.getIdentifier(value));
 
       content += radio;
     });
 
     return content;
+  },
+  getIdentifier(value) {
+    const code = value.code.split(value.code_delimiter);
+    let id = code[1];
+    let identifier = id;
+    // DPD for the URL info (FR)
+    if (code[0] === 'dpd' && code[2] === 'FR') {
+      identifier = `<a href="https://www.dpd.fr/dpdrelais/id_${id}" target="_blank"> ${id} <i class="external alternate icon"></i></a>`;
+    }
+
+    return identifier;
   },
 };

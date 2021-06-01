@@ -176,4 +176,9 @@ class PickupPoint implements PickupPointInterface
     {
         return $this->opened ?? null;
     }
+
+    public function getCodeDelimiter()
+    {
+        return $this->code->getDelimiter();
+    }
 }
