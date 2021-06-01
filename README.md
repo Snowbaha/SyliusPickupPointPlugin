@@ -252,8 +252,6 @@ setono_sylius_pickup_point:
 
 ### Step 6: Update database schema
 
-/!\ If you need local data, create the file deleted in https://github.com/Snowbaha/SyliusPickupPointPlugin/commit/038122f9e7b09dd65646ac29c0d79f1906799430
-
 ```bash
 bin/console doctrine:migrations:diff
 bin/console doctrine:migrations:migrate 
