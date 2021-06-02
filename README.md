@@ -1,10 +1,7 @@
-# Sylius Pickup Point Plugin
+# Sylius Pickup Point Plugin FORKED for DPD
 
-[![Latest Version][ico-version]][link-packagist]
-[![Latest Unstable Version][ico-unstable-version]][link-packagist]
-[![Software License][ico-license]](LICENSE)
-[![Build Status][ico-github-actions]][link-github-actions]
-[![Quality Score][ico-code-quality]][link-code-quality]
+***/!\ This fork is adapted to add the DPD Provider. It is only tested with DPD FR. /!\***
+
 
 Add a `<select>` that contains pickup points to your select shipping checkout step.
 
