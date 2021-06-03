@@ -19,6 +19,12 @@ let pickupPoints = {
     }
 
     if (0 === self.pickupPointShippingMethods.length) {
+
+      //hide the pickup block if no methods
+      if(self.pickupPointsField !== undefined) {
+        self.pickupPointsField.style.display = 'none';
+      }
+
       return;
     }
 
