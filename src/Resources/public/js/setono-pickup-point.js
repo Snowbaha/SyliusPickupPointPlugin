@@ -56,7 +56,12 @@ let pickupPoints = {
     const xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
       if (4 === xhttp.readyState && 200 === xhttp.status) {
-        pickupPointChoices[shippingMethodCode] = JSON.parse(xhttp.response);
+        if(tryParseJSONObject(xhttp.response)){
+          pickupPointChoices[shippingMethodCode] = JSON.parse(xhttp.response);
+        } else{
+          console.log(xhttp);
+          alert('Issue with the pickup point - Problème avec la récupération des points relais...');
+        }
       }
     }
     // Use synchronous xhttp request since we need the result to continue the process
@@ -125,7 +130,7 @@ let pickupPoints = {
       radio = radio.replace(/{latitude}/g, value.latitude);
       radio = radio.replace(/{longitude}/g, value.longitude);
 
-      let distance = value.distance !== undefined ? value.distance + 'm' : '';
+      let distance = value.distance_km !== undefined ? value.distance_km + ' km' : '';
       radio = radio.replace(/{distance}/g, distance);
 
       let opening_hours = '';
@@ -153,4 +158,31 @@ let pickupPoints = {
 
     return identifier;
   },
+};
+
+/**
+ * If you don't care about primitives and only objects then this function
+ * is for you, otherwise look elsewhere.
+ * This function will return `false` for any valid json primitive.
+ * EG, 'true' -> false
+ *     '123' -> false
+ *     'null' -> false
+ *     '"I'm a string"' -> false
+ * @see https://stackoverflow.com/questions/3710204/how-to-check-if-a-string-is-a-valid-json-string-in-javascript-without-using-try
+ */
+function tryParseJSONObject (jsonString){
+  try {
+    var o = JSON.parse(jsonString);
+
+    // Handle non-exception-throwing cases:
+    // Neither JSON.parse(false) or JSON.parse(1234) throw errors, hence the type-checking,
+    // but... JSON.parse(null) returns null, and typeof null === "object",
+    // so we must check for that, too. Thankfully, null is falsey, so this suffices:
+    if (o && typeof o === "object") {
+      return o;
+    }
+  }
+  catch (e) { }
+
+  return false;
 };

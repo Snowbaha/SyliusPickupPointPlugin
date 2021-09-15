@@ -161,7 +161,6 @@ class PickupPoint implements PickupPointInterface
     }
 
 
-
     public function getFullAddress(): string
     {
         return sprintf(
@@ -170,6 +169,13 @@ class PickupPoint implements PickupPointInterface
             $this->getZipCode(),
             $this->getCity()
         );
+    }
+
+    public function getDistanceKm(): float
+    {
+        $distance = null !== $this->getDistance() ? $this->getDistance() : 0;
+
+        return round($distance/1000, 1);
     }
 
     public function getOpeningHours()
